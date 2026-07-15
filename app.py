@@ -163,6 +163,7 @@ liquicity_acts = [
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "20:00", "Eind": "21:00", "Artiest": "Mxtr", "Stage": "Nebula"},
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:00", "Eind": "22:00", "Artiest": "Rameses B Psytrance Power Hour", "Stage": "Nebula"},
 ]
+
 df_acts = pd.DataFrame(liquicity_acts)
 
 col1, col2 = st.columns(2)
@@ -171,29 +172,61 @@ with col1:
     st.subheader("Selecteer jouw Must-Sees")
     
     with st.form(key="form_timetable_local"):
+        # === FILTER SECTIE ===
+        st.markdown("##### 🔍 Filter de Timetable")
+        f_col1, f_col2 = st.columns(2)
+        
+        with f_col1:
+            filter_dag = st.multiselect(
+                "Kies Dag(en):", 
+                options=["Vrijdag", "Zaterdag", "Zondag"], 
+                default=["Vrijdag", "Zaterdag", "Zondag"]
+            )
+            
+        with f_col2:
+            filter_stage = st.multiselect(
+                "Kies Stage(s):", 
+                options=["Galaxy", "Solar", "Lunar", "Nebula"], 
+                default=["Galaxy", "Solar", "Lunar", "Nebula"]
+            )
+            
+        st.write("---")
+        
         tijdelijke_vinkjes = {}
         
-        # Loopt netjes door alle dagen heen
+        # Loop door de dagen die geselecteerd zijn in het filter
         for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
-            dag_acts = df_acts[df_acts["Dag"] == dag]
-            
-            if not dag_acts.empty:
-                st.markdown(f"### 📅 {dag}")
+            if dag in filter_dag:
+                # Filter de data op basis van de gekozen dag én de gekozen stages
+                dag_acts = df_acts[(df_acts["Dag"] == dag) & (df_acts["Stage"].isin(filter_stage))]
                 
-                for _, act in dag_acts.iterrows():
-                    # Unieke sleutel per dag om de duplicate ID fout op te lossen
-                    key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
-                    is_checked = key in st.session_state.mijn_timetable
+                if not dag_acts.empty:
+                    st.markdown(f"### 📅 {dag}")
                     
-                    # Unieke key meegeven aan Streamlit widget om crashes te voorkomen
-                    tijdelijke_vinkjes[key] = st.checkbox(
-                        f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
-                        value=is_checked,
-                        key=f"cb_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
-                    )
+                    for _, act in dag_acts.iterrows():
+                        # Unieke sleutel per artiest
+                        key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
+                        is_checked = key in st.session_state.mijn_timetable
+                        
+                        # Checkbox tonen
+                        tijdelijke_vinkjes[key] = st.checkbox(
+                            f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
+                            value=is_checked,
+                            key=f"cb_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
+                        )
             
+        # Zorg dat we ook de vinkjes onthouden van artiesten die NU weggefilterd zijn
         if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
-            st.session_state.mijn_timetable = [k for k, v in tijdelijke_vinkjes.items() if v]
+            # Haal de huidige selectie op van de artiesten die momenteel zichtbaar zijn
+            nieuwe_selectie = [k for k, v in tijdelijke_vinkjes.items() if v]
+            
+            # Voeg artiesten toe die al eerder opgeslagen waren, maar nu onzichtbaar zijn door de filters
+            for oude_key in st.session_state.mijn_timetable:
+                # Als de oude artiest nu buiten de gefilterde lijst viel, behouden we hem gewoon
+                if oude_key not in tijdelijke_vinkjes:
+                    nieuwe_selectie.append(oude_key)
+                    
+            st.session_state.mijn_timetable = neue_selectie
             st.rerun()
 
 with col2:
@@ -221,7 +254,6 @@ with col2:
             start_clean = act["Start"].replace(":", "") + "00"
             end_clean = act["Eind"].replace(":", "") + "00"
             
-            # Nacht-logica voor sets die over middernacht heengaan
             end_date = date_clean
             if int(end_clean) <= int(start_clean):
                 if date_clean == "20260717": end_date = "20260718"
