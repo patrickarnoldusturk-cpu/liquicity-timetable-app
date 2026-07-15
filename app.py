@@ -12,9 +12,10 @@ if "mijn_timetable" not in st.session_state:
 st.title("🪐 Liquicity Weekend 2026 Timetable Planner")
 st.write("Vink je favoriete artiesten aan, sla ze op en download je persoonlijke `.ics`-agendabestand.")
 
-# Complete Line-up Data (Deel 1: Vrijdag)
+# Complete Weekend Line-up Data
 liquicity_acts = [
-    # === VRIJDAG GALAXY STAGE ===
+    # ==================== VRIJDAG ====================
+    # === GALAXY STAGE ===
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "11:00", "Eind": "12:30", "Artiest": "Midaze", "Stage": "Galaxy"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "12:30", "Eind": "13:45", "Artiest": "Ketsune", "Stage": "Galaxy"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "13:45", "Eind": "15:00", "Artiest": "Hiraeth", "Stage": "Galaxy"},
@@ -26,7 +27,7 @@ liquicity_acts = [
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "21:15", "Eind": "22:30", "Artiest": "Kanine (ft. Rage MC)", "Stage": "Galaxy"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "22:30", "Eind": "00:00", "Artiest": "Andy C (ft. Tonn Piper)", "Stage": "Galaxy"},
 
-    # === VRIJDAG SOLAR STAGE ===
+    # === SOLAR STAGE ===
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "11:00", "Eind": "12:15", "Artiest": "Astronymous", "Stage": "Solar"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "12:15", "Eind": "13:30", "Artiest": "48Past", "Stage": "Solar"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "13:30", "Eind": "14:45", "Artiest": "Mod", "Stage": "Solar"},
@@ -40,7 +41,7 @@ liquicity_acts = [
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "22:00", "Eind": "23:00", "Artiest": "Pirapus (ft. Fava)", "Stage": "Solar"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "23:00", "Eind": "00:00", "Artiest": "Lexurus (ft. Mota)", "Stage": "Solar"},
 
-    # === VRIJDAG LUNAR STAGE ===
+    # === LUNAR STAGE ===
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "11:00", "Eind": "13:00", "Artiest": "Botone", "Stage": "Lunar"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "13:00", "Eind": "14:15", "Artiest": "Noppo", "Stage": "Lunar"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "14:15", "Eind": "15:30", "Artiest": "Imo-Lu", "Stage": "Lunar"},
@@ -51,7 +52,7 @@ liquicity_acts = [
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "21:00", "Eind": "22:30", "Artiest": "S.P.Y", "Stage": "Lunar"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "22:30", "Eind": "00:00", "Artiest": "Imanu", "Stage": "Lunar"},
 
-    # === VRIJDAG NEBULA STAGE ===
+    # === NEBULA STAGE ===
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "11:00", "Eind": "13:00", "Artiest": "Kubalo", "Stage": "Nebula"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "13:00", "Eind": "14:00", "Artiest": "As:She", "Stage": "Nebula"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "14:00", "Eind": "15:00", "Artiest": "Drum 'n Babes", "Stage": "Nebula"},
@@ -63,9 +64,8 @@ liquicity_acts = [
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "20:30", "Eind": "21:30", "Artiest": "Hot Cues", "Stage": "Nebula"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "21:30", "Eind": "22:30", "Artiest": "Something Else with Fox & Yue", "Stage": "Nebula"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "22:30", "Eind": "23:30", "Artiest": "Blackout Baddies", "Stage": "Nebula"},
-
-
-    # === ZATERDAG GALAXY STAGE ===
+    # ==================== ZATERDAG ====================
+    # === GALAXY STAGE ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "11:00", "Eind": "12:30", "Artiest": "Midaze", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "12:30", "Eind": "14:00", "Artiest": "Operator21", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "14:00", "Eind": "15:15", "Artiest": "Matt View & Hannelotta", "Stage": "Galaxy"},
@@ -77,7 +77,7 @@ liquicity_acts = [
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "21:30", "Eind": "22:45", "Artiest": "Delta Heavy (ft. Daxta)", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "22:45", "Eind": "00:00", "Artiest": "Andromedik", "Stage": "Galaxy"},
 
-    # === ZATERDAG SOLAR STAGE ===
+    # === SOLAR STAGE ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "11:00", "Eind": "12:15", "Artiest": "Astronymous", "Stage": "Solar"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "12:15", "Eind": "13:15", "Artiest": "Zazu", "Stage": "Solar"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "13:15", "Eind": "14:15", "Artiest": "L.A.O.S", "Stage": "Solar"},
@@ -91,7 +91,7 @@ liquicity_acts = [
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "21:45", "Eind": "23:00", "Artiest": "T & Sugah", "Stage": "Solar"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "23:00", "Eind": "00:00", "Artiest": "Feint (ft. Fava)", "Stage": "Solar"},
 
-    # === ZATERDAG LUNAR STAGE ===
+    # === LUNAR STAGE ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "11:00", "Eind": "12:45", "Artiest": "Botone", "Stage": "Lunar"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "12:45", "Eind": "14:00", "Artiest": "Miesfm", "Stage": "Lunar"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "14:00", "Eind": "15:00", "Artiest": "Styke", "Stage": "Lunar"},
@@ -102,7 +102,7 @@ liquicity_acts = [
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "21:00", "Eind": "22:30", "Artiest": "Etherwood", "Stage": "Lunar"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "22:30", "Eind": "00:00", "Artiest": "Technimatic", "Stage": "Lunar"},
 
-    # === ZATERDAG NEBULA STAGE ===
+    # === NEBULA STAGE ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "11:00", "Eind": "12:00", "Artiest": "Kubalo", "Stage": "Nebula"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "12:00", "Eind": "13:00", "Artiest": "Giant Musical Chairs", "Stage": "Nebula"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "13:00", "Eind": "14:00", "Artiest": "Waves & Nebulaheights", "Stage": "Nebula"},
@@ -115,22 +115,54 @@ liquicity_acts = [
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "20:00", "Eind": "21:00", "Artiest": "Rex Hooligan", "Stage": "Nebula"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "21:00", "Eind": "22:00", "Artiest": "Eetlaste Kaksnurk", "Stage": "Nebula"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "22:00", "Eind": "23:30", "Artiest": "Thrasher", "Stage": "Nebula"},
+    # ==================== ZONDAG ====================
+    # === GALAXY STAGE ===
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "11:00", "Eind": "12:30", "Artiest": "Midaze", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "12:30", "Eind": "14:30", "Artiest": "Auris & Friends", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:30", "Eind": "15:45", "Artiest": "Nymfo", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "15:45", "Eind": "17:00", "Artiest": "Goddard (ft. Fava)", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "17:00", "Eind": "18:00", "Artiest": "Catching Cairo", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "18:00", "Eind": "19:00", "Artiest": "Aktive (ft. Fava)", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "19:00", "Eind": "20:15", "Artiest": "Culture Shock", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "20:15", "Eind": "21:30", "Artiest": "Wilkinson", "Stage": "Galaxy"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:30", "Eind": "23:00", "Artiest": "Netsky", "Stage": "Galaxy"},
 
-    # === ZONDAG ===
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "13:00", "Eind": "14:15", "Artiest": "Edlan", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:15", "Eind": "15:30", "Artiest": "Changing Faces", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "15:30", "Eind": "16:45", "Artiest": "Keeno", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "16:45", "Eind": "18:00", "Artiest": "Whiney", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "18:00", "Eind": "19:15", "Artiest": "Bcee", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "19:15", "Eind": "20:30", "Artiest": "Nu:Tone", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "20:30", "Eind": "21:45", "Artiest": "Logistics", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:45", "Eind": "23:00", "Artiest": "Lenzman", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "23:00", "Eind": "00:15", "Artiest": "Calibre", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "00:15", "Eind": "01:30", "Artiest": "Spectrasoul", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "01:30", "Eind": "02:45", "Artiest": "Alix Perez", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "02:45", "Eind": "04:00", "Artiest": "DRS", "Stage": "Galaxy"},
+    # === SOLAR STAGE ===
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "11:00", "Eind": "12:00", "Artiest": "Astronymous", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "12:00", "Eind": "13:00", "Artiest": "Lirios", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "13:00", "Eind": "14:30", "Artiest": "Flint & Figure", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:30", "Eind": "15:45", "Artiest": "Aperio", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "15:45", "Eind": "16:45", "Artiest": "Genetics (ft. Wolf Pax)", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "16:45", "Eind": "18:00", "Artiest": "Ekko & Sidetrack (ft. Mota)", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "18:00", "Eind": "19:15", "Artiest": "Disrupta (ft. Wolf Pax)", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "19:15", "Eind": "20:30", "Artiest": "Subsonic (ft. Mota)", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "20:30", "Eind": "21:45", "Artiest": "A.M.C (ft. Phantom)", "Stage": "Solar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:45", "Eind": "23:00", "Artiest": "Mandidextrous (ft. Mota)", "Stage": "Solar"},
+
+    # === LUNAR STAGE ===
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "11:00", "Eind": "12:45", "Artiest": "Botone", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "12:45", "Eind": "13:45", "Artiest": "Ipkiss", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "13:45", "Eind": "14:45", "Artiest": "Creek", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:45", "Eind": "16:00", "Artiest": "Alb", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "16:00", "Eind": "17:15", "Artiest": "Alibi", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "17:15", "Eind": "18:30", "Artiest": "Low:r", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "18:30", "Eind": "19:45", "Artiest": "Anaïs", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "19:45", "Eind": "21:00", "Artiest": "Skantia", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:00", "Eind": "22:00", "Artiest": "Basstripper", "Stage": "Lunar"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "22:00", "Eind": "23:00", "Artiest": "Pythius", "Stage": "Lunar"},
+
+    # === NEBULA STAGE ===
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "11:00", "Eind": "13:00", "Artiest": "Kubalo", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "13:00", "Eind": "14:00", "Artiest": "Maud & Mika Morning Workout", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:00", "Eind": "15:00", "Artiest": "Dossa's Disco Drive", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "15:00", "Eind": "16:00", "Artiest": "Lasyen & Lennart Hoffmann", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "16:00", "Eind": "17:00", "Artiest": "Liquicity Office Party", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "17:00", "Eind": "18:00", "Artiest": "Prodace & Niek", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "18:00", "Eind": "19:00", "Artiest": "Reese Roelvink & Wobble Ockles", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "19:00", "Eind": "20:00", "Artiest": "Polygon", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "20:00", "Eind": "21:00", "Artiest": "Mxtr", "Stage": "Nebula"},
+    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:00", "Eind": "22:00", "Artiest": "Rameses B Psytrance Power Hour", "Stage": "Nebula"},
 ]
-
 df_acts = pd.DataFrame(liquicity_acts)
 
 col1, col2 = st.columns(2)
@@ -149,11 +181,11 @@ with col1:
                 st.markdown(f"### 📅 {dag}")
                 
                 for _, act in dag_acts.iterrows():
-                    # Door [Dag] toe te voegen aan de key, lossen we de DuplicateElementId fout definitief op!
+                    # Unieke sleutel per dag om de duplicate ID fout op te lossen
                     key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
                     is_checked = key in st.session_state.mijn_timetable
                     
-                    # We geven een unieke 'key=' mee aan de checkbox zelf zodat Streamlit nooit meer crasht
+                    # Unieke key meegeven aan Streamlit widget om crashes te voorkomen
                     tijdelijke_vinkjes[key] = st.checkbox(
                         f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
                         value=is_checked,
@@ -181,6 +213,7 @@ with col2:
         df_selectie = pd.DataFrame(geselecteerde_acts)
         st.dataframe(df_selectie[["Dag", "Start", "Eind", "Artiest", "Stage"]], use_container_width=True, hide_index=True)
         
+        # === VEILIGE ICS GENERATOR ===
         ics_content = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Liquicity Timetable Planner//NL\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n"
         
         for act in geselecteerde_acts:
@@ -188,6 +221,7 @@ with col2:
             start_clean = act["Start"].replace(":", "") + "00"
             end_clean = act["Eind"].replace(":", "") + "00"
             
+            # Nacht-logica voor sets die over middernacht heengaan
             end_date = date_clean
             if int(end_clean) <= int(start_clean):
                 if date_clean == "20260717": end_date = "20260718"
@@ -212,4 +246,3 @@ with col2:
             mime="text/calendar", 
             use_container_width=True
         )
-
