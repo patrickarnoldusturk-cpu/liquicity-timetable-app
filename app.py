@@ -109,7 +109,7 @@ with col1:
             st.markdown(f"### 📅 {dag}")
             dag_acts = df_acts[df_acts["Dag"] == dag]
             
-            for _, act in dag_acts.iterrows():
+        for _, act in dag_acts.iterrows():
                 key = f"{act['Artiest']} ({act['Start']}-{act['Eind']})"
                 is_checked = key in st.session_state.mijn_timetable
                 tijdelijke_vinkjes[key] = st.checkbox(f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", value=is_checked)
