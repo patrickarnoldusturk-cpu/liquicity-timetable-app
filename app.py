@@ -141,6 +141,7 @@ with col1:
     with st.form(key="form_timetable_local"):
         tijdelijke_vinkjes = {}
         
+        # Loopt netjes door alle dagen heen
         for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
             dag_acts = df_acts[df_acts["Dag"] == dag]
             
@@ -148,9 +149,16 @@ with col1:
                 st.markdown(f"### 📅 {dag}")
                 
                 for _, act in dag_acts.iterrows():
-                    key = f"{act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
+                    # Door [Dag] toe te voegen aan de key, lossen we de DuplicateElementId fout definitief op!
+                    key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
                     is_checked = key in st.session_state.mijn_timetable
-                    tijdelijke_vinkjes[key] = st.checkbox(f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", value=is_checked)
+                    
+                    # We geven een unieke 'key=' mee aan de checkbox zelf zodat Streamlit nooit meer crasht
+                    tijdelijke_vinkjes[key] = st.checkbox(
+                        f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
+                        value=is_checked,
+                        key=f"cb_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
+                    )
             
         if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
             st.session_state.mijn_timetable = [k for k, v in tijdelijke_vinkjes.items() if v]
@@ -166,7 +174,7 @@ with col2:
         
         geselecteerde_acts = []
         for act in liquicity_acts:
-            match_key = f"{act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
+            match_key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
             if match_key in st.session_state.mijn_timetable:
                 geselecteerde_acts.append(act)
         
