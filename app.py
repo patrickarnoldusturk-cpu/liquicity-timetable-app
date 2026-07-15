@@ -106,14 +106,20 @@ with col1:
     with st.form(key="form_timetable_local"):
         tijdelijke_vinkjes = {}
         
+        # Loopt netjes door alle dagen heen
         for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
-            st.markdown(f"### 📅 {dag}")
             dag_acts = df_acts[df_acts["Dag"] == dag]
             
-        for _, act in dag_acts.iterrows():
-                key = f"{act['Artiest']} ({act['Start']}-{act['Eind']})"
-                is_checked = key in st.session_state.mijn_timetable
-                tijdelijke_vinkjes[key] = st.checkbox(f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", value=is_checked)
+            # Toon alleen een kopje als er artiesten zijn voor die dag
+            if not dag_acts.empty:
+                st.markdown(f"### 📅 {dag}")
+                
+                # DEZE LUS STAAT NU NETJES BINNEN DE DAGEN-LUS
+                for _, act in dag_acts.iterrows():
+                    # Unieke sleutel inclusief stage om botsingen te voorkomen
+                    key = f"{act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
+                    is_checked = key in st.session_state.mijn_timetable
+                    tijdelijke_vinkjes[key] = st.checkbox(f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", value=is_checked)
             
         if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
             st.session_state.mijn_timetable = [k for k, v in tijdelijke_vinkjes.items() if v]
@@ -123,19 +129,20 @@ with col2:
     st.subheader("Jouw Persoonlijke Planning")
     
     if not st.session_state.mijn_timetable:
-        st.info("Je hebt nog geen artiesten geselecteerd.")
+        st.info("Je hebt nog geen artiesten geselecteerd. Vink je favorieten aan de linkerkant aan en druk op Opslaan.")
     else:
         st.success(f"Je hebt {len(st.session_state.mijn_timetable)} optredens geselecteerd!")
         
         geselecteerde_acts = []
         for act in liquicity_acts:
-            match_key = f"{act['Artiest']} ({act['Start']}-{act['Eind']})"
+            match_key = f"{act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
             if match_key in st.session_state.mijn_timetable:
                 geselecteerde_acts.append(act)
         
         df_selectie = pd.DataFrame(geselecteerde_acts)
         st.dataframe(df_selectie[["Dag", "Start", "Eind", "Artiest", "Stage"]], use_container_width=True, hide_index=True)
         
+        # === GEPREPAREERDE EN VEILIGE ICS GENERATOR ===
         ics_content = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Liquicity Timetable Planner//NL\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n"
         
         for act in geselecteerde_acts:
@@ -143,28 +150,28 @@ with col2:
             start_clean = act["Start"].replace(":", "") + "00"
             end_clean = act["Eind"].replace(":", "") + "00"
             
-            st_hour = int(act["Start"].split(":")[0])
-            act_date = date_clean
-            if st_hour < 6:
-                if act["Dag"] == "Vrijdag": act_date = "20260718"
-                elif act["Dag"] == "Zaterdag": act_date = "20260719"
-                elif act["Dag"] == "Zondag": act_date = "20260720"
-            
-            end_date = act_date
-            if int(end_clean) < int(start_clean):
-                if act_date == "20260717": end_date = "20260718"
-                elif act_date == "20260718": end_date = "20260719"
-                elif act_date == "20260719": end_date = "20260720"
+            # Veilige nacht-logica zonder split-crashes
+            end_date = date_clean
+            if int(end_clean) <= int(start_clean):
+                if date_clean == "20260717": end_date = "20260718"
+                elif date_clean == "20260718": end_date = "20260719"
+                elif date_clean == "20260719": end_date = "20260720"
 
             ics_content += "BEGIN:VEVENT\n"
             ics_content += f"SUMMARY:🚀 {act['Artiest']}\n"
             ics_content += f"LOCATION:🏟️ {act['Stage']}\n"
-            ics_content += f"DESCRIPTION:Liquicity Weekend 2026\n"
-            ics_content += f"DTSTART;TZID=Europe/Amsterdam:{act_date}T{start_clean}\n"
+            ics_content += f"DESCRIPTION:Liquicity Weekend 2026 - live op de {act['Stage']} stage.\n"
+            ics_content += f"DTSTART;TZID=Europe/Amsterdam:{date_clean}T{start_clean}\n"
             ics_content += f"DTEND;TZID=Europe/Amsterdam:{end_date}T{end_clean}\n"
             ics_content += "END:VEVENT\n"
             
         ics_content += "END:VCALENDAR"
         
         ics_bytes = io.BytesIO(ics_content.encode("utf-8"))
-        st.download_button(label="📅 Download .ics Agenda", data=ics_bytes, file_name="liquicity_timetable.ics", mime="text/calendar", use_container_width=True)
+        st.download_button(
+            label="📅 Download .ics Agenda", 
+            data=ics_bytes, 
+            file_name="liquicity_timetable.ics", 
+            mime="text/calendar", 
+            use_container_width=True
+        )
