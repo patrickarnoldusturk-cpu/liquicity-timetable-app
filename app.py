@@ -66,7 +66,7 @@ liquicity_acts = [
 ]
 
     
-    # ZATERDAG
+    # === ZATERDAG ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "13:00", "Eind": "14:15", "Artiest": "Telomic", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "14:15", "Eind": "15:30", "Artiest": "Monrroe", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "15:30", "Eind": "16:45", "Artiest": "LSB", "Stage": "Galaxy"},
@@ -80,7 +80,7 @@ liquicity_acts = [
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "01:30", "Eind": "02:45", "Artiest": "ShockOne", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "02:45", "Eind": "04:00", "Artiest": "Murdock", "Stage": "Galaxy"},
 
-    # ZONDAG
+    # === ZONDAG ===
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "13:00", "Eind": "14:15", "Artiest": "Edlan", "Stage": "Galaxy"},
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:15", "Eind": "15:30", "Artiest": "Changing Faces", "Stage": "Galaxy"},
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "15:30", "Eind": "16:45", "Artiest": "Keeno", "Stage": "Galaxy"},
@@ -94,6 +94,7 @@ liquicity_acts = [
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "01:30", "Eind": "02:45", "Artiest": "Alix Perez", "Stage": "Galaxy"},
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "02:45", "Eind": "04:00", "Artiest": "DRS", "Stage": "Galaxy"},
 ]
+
 
 df_acts = pd.DataFrame(liquicity_acts)
 
