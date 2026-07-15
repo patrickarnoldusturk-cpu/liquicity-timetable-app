@@ -65,7 +65,6 @@ liquicity_acts = [
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "22:30", "Eind": "23:30", "Artiest": "Blackout Baddies", "Stage": "Nebula"},
 
 
-
     # === ZATERDAG GALAXY STAGE ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "11:00", "Eind": "12:30", "Artiest": "Midaze", "Stage": "Galaxy"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "12:30", "Eind": "14:00", "Artiest": "Operator21", "Stage": "Galaxy"},
@@ -132,23 +131,6 @@ liquicity_acts = [
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "02:45", "Eind": "04:00", "Artiest": "DRS", "Stage": "Galaxy"},
 ]
 
-
-    # === ZONDAG ===
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "13:00", "Eind": "14:15", "Artiest": "Edlan", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "14:15", "Eind": "15:30", "Artiest": "Changing Faces", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "15:30", "Eind": "16:45", "Artiest": "Keeno", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "16:45", "Eind": "18:00", "Artiest": "Whiney", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "18:00", "Eind": "19:15", "Artiest": "Bcee", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "19:15", "Eind": "20:30", "Artiest": "Nu:Tone", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "20:30", "Eind": "21:45", "Artiest": "Logistics", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:45", "Eind": "23:00", "Artiest": "Lenzman", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "23:00", "Eind": "00:15", "Artiest": "Calibre", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "00:15", "Eind": "01:30", "Artiest": "Spectrasoul", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "01:30", "Eind": "02:45", "Artiest": "Alix Perez", "Stage": "Galaxy"},
-    {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "02:45", "Eind": "04:00", "Artiest": "DRS", "Stage": "Galaxy"},
-]
-
-
 df_acts = pd.DataFrame(liquicity_acts)
 
 col1, col2 = st.columns(2)
@@ -159,16 +141,13 @@ with col1:
     with st.form(key="form_timetable_local"):
         tijdelijke_vinkjes = {}
         
-        # Loopt netjes door alle dagen heen
         for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
             dag_acts = df_acts[df_acts["Dag"] == dag]
             
-            # Toon alleen een kopje als er artiesten zijn voor die dag
             if not dag_acts.empty:
                 st.markdown(f"### 📅 {dag}")
                 
                 for _, act in dag_acts.iterrows():
-                    # Unieke sleutel inclusief stage om botsingen te voorkomen
                     key = f"{act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
                     is_checked = key in st.session_state.mijn_timetable
                     tijdelijke_vinkjes[key] = st.checkbox(f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", value=is_checked)
@@ -194,7 +173,6 @@ with col2:
         df_selectie = pd.DataFrame(geselecteerde_acts)
         st.dataframe(df_selectie[["Dag", "Start", "Eind", "Artiest", "Stage"]], use_container_width=True, hide_index=True)
         
-        # === GEPREPAREERDE EN VEILIGE ICS GENERATOR ===
         ics_content = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Liquicity Timetable Planner//NL\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n"
         
         for act in geselecteerde_acts:
@@ -202,7 +180,6 @@ with col2:
             start_clean = act["Start"].replace(":", "") + "00"
             end_clean = act["Eind"].replace(":", "") + "00"
             
-            # Veilige nacht-logica zonder split-crashes
             end_date = date_clean
             if int(end_clean) <= int(start_clean):
                 if date_clean == "20260717": end_date = "20260718"
@@ -227,3 +204,4 @@ with col2:
             mime="text/calendar", 
             use_container_width=True
         )
+
