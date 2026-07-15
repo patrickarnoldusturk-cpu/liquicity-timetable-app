@@ -171,62 +171,59 @@ col1, col2 = st.columns(2)
 with col1:
     st.subheader("Selecteer jouw Must-Sees")
     
+    # === FILTER SECTIE (Nu BUITEN de form geplaatst voor instant resultaat) ===
+    st.markdown("##### 🔍 Live Filters")
+    f_col1, f_col2 = st.columns(2)
+    
+    with f_col1:
+        filter_dag = st.multiselect(
+            "Kies Dag(en):", 
+            options=["Vrijdag", "Zaterdag", "Zondag"], 
+            default=["Vrijdag", "Zaterdag", "Zondag"]
+        )
+        
+    with f_col2:
+        filter_stage = st.multiselect(
+            "Kies Stage(s):", 
+            options=["Galaxy", "Solar", "Lunar", "Nebula"], 
+            default=["Galaxy", "Solar", "Lunar", "Nebula"]
+        )
+        
+    st.write("---")
+    
+    # Het formulier bevat nu alleen nog de checkboxes en de opslaan-knop
     with st.form(key="form_timetable_local"):
-        # === FILTER SECTIE ===
-        st.markdown("##### 🔍 Filter de Timetable")
-        f_col1, f_col2 = st.columns(2)
-        
-        with f_col1:
-            filter_dag = st.multiselect(
-                "Kies Dag(en):", 
-                options=["Vrijdag", "Zaterdag", "Zondag"], 
-                default=["Vrijdag", "Zaterdag", "Zondag"]
-            )
-            
-        with f_col2:
-            filter_stage = st.multiselect(
-                "Kies Stage(s):", 
-                options=["Galaxy", "Solar", "Lunar", "Nebula"], 
-                default=["Galaxy", "Solar", "Lunar", "Nebula"]
-            )
-            
-        st.write("---")
-        
         tijdelijke_vinkjes = {}
         
-        # Loop door de dagen die geselecteerd zijn in het filter
+        # Loop door alle dagen
         for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
+            # Toon de dag alleen als deze is aangevinkt in de live filter
             if dag in filter_dag:
-                # Filter de data op basis van de gekozen dag én de gekozen stages
+                # Filter de acts direct op basis van de gekozen stages
                 dag_acts = df_acts[(df_acts["Dag"] == dag) & (df_acts["Stage"].isin(filter_stage))]
                 
                 if not dag_acts.empty:
                     st.markdown(f"### 📅 {dag}")
                     
                     for _, act in dag_acts.iterrows():
-                        # Unieke sleutel per artiest
                         key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
                         is_checked = key in st.session_state.mijn_timetable
                         
-                        # Checkbox tonen
                         tijdelijke_vinkjes[key] = st.checkbox(
                             f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
                             value=is_checked,
                             key=f"cb_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
                         )
             
-        # Zorg dat we ook de vinkjes onthouden van artiesten die NU weggefilterd zijn
         if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
-            # Haal de huidige selectie op van de artiesten die momenteel zichtbaar zijn
             nieuwe_selectie = [k for k, v in tijdelijke_vinkjes.items() if v]
             
-            # Voeg artiesten toe die al eerder opgeslagen waren, maar nu onzichtbaar zijn door de filters
+            # Behoud de selectie van artiesten die op dit moment verborgen zijn door actieve filters
             for oude_key in st.session_state.mijn_timetable:
-                # Als de oude artiest nu buiten de gefilterde lijst viel, behouden we hem gewoon
                 if oude_key not in tijdelijke_vinkjes:
                     nieuwe_selectie.append(oude_key)
                     
-            st.session_state.mijn_timetable = neue_selectie
+            st.session_state.mijn_timetable = nieuwe_selectie
             st.rerun()
 
 with col2:
