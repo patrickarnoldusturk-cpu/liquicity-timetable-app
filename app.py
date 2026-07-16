@@ -166,112 +166,150 @@ liquicity_acts = [
 
 df_acts = pd.DataFrame(liquicity_acts)
 
-col1, col2 = st.columns(2)
+# === HOOFDPAGINA TABBLADEN AANMAKEN ===
+tab1, tab2 = st.tabs(["📅 Timetable Planner", "🗺️ Festival Plattegrond"])
 
-with col1:
-    st.subheader("Selecteer jouw Must-Sees")
-    
-    # === FILTER SECTIE (Nu BUITEN de form geplaatst voor instant resultaat) ===
-    st.markdown("##### 🔍 Live Filters")
-    f_col1, f_col2 = st.columns(2)
-    
-    with f_col1:
-        filter_dag = st.multiselect(
-            "Kies Dag(en):", 
-            options=["Vrijdag", "Zaterdag", "Zondag"], 
-            default=["Vrijdag", "Zaterdag", "Zondag"]
-        )
+# ==========================================
+# TAB 1: DE TIMETABLE PLANNER (BESTAANDE CODE)
+# ==========================================
+with tab1:
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Selecteer jouw Must-Sees")
         
-    with f_col2:
-        filter_stage = st.multiselect(
-            "Kies Stage(s):", 
-            options=["Galaxy", "Solar", "Lunar", "Nebula"], 
-            default=["Galaxy", "Solar", "Lunar", "Nebula"]
-        )
+        # Live Filters
+        st.markdown("##### 🔍 Live Filters")
+        f_col1, f_col2 = st.columns(2)
         
-    st.write("---")
-    
-    # Het formulier bevat nu alleen nog de checkboxes en de opslaan-knop
-    with st.form(key="form_timetable_local"):
-        tijdelijke_vinkjes = {}
+        with f_col1:
+            filter_dag = st.multiselect(
+                "Kies Dag(en):", 
+                options=["Vrijdag", "Zaterdag", "Zondag"], 
+                default=["Vrijdag", "Zaterdag", "Zondag"],
+                key="filter_dag_tab1"
+            )
+            
+        with f_col2:
+            filter_stage = st.multiselect(
+                "Kies Stage(s):", 
+                options=["Galaxy", "Solar", "Lunar", "Nebula"], 
+                default=["Galaxy", "Solar", "Lunar", "Nebula"],
+                key="filter_stage_tab1"
+            )
+            
+        st.write("---")
         
-        # Loop door alle dagen
-        for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
-            # Toon de dag alleen als deze is aangevinkt in de live filter
-            if dag in filter_dag:
-                # Filter de acts direct op basis van de gekozen stages
-                dag_acts = df_acts[(df_acts["Dag"] == dag) & (df_acts["Stage"].isin(filter_stage))]
-                
-                if not dag_acts.empty:
-                    st.markdown(f"### 📅 {dag}")
+        with st.form(key="form_timetable_local_tabs"):
+            tijdelijke_vinkjes = {}
+            
+            for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
+                if dag in filter_dag:
+                    dag_acts = df_acts[(df_acts["Dag"] == dag) & (df_acts["Stage"].isin(filter_stage))]
                     
-                    for _, act in dag_acts.iterrows():
-                        key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
-                        is_checked = key in st.session_state.mijn_timetable
+                    if not dag_acts.empty:
+                        st.markdown(f"### 📅 {dag}")
                         
-                        tijdelijke_vinkjes[key] = st.checkbox(
-                            f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
-                            value=is_checked,
-                            key=f"cb_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
-                        )
-            
-        if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
-            nieuwe_selectie = [k for k, v in tijdelijke_vinkjes.items() if v]
-            
-            # Behoud de selectie van artiesten die op dit moment verborgen zijn door actieve filters
-            for oude_key in st.session_state.mijn_timetable:
-                if oude_key not in tijdelijke_vinkjes:
-                    nieuwe_selectie.append(oude_key)
-                    
-            st.session_state.mijn_timetable = nieuwe_selectie
-            st.rerun()
+                        for _, act in dag_acts.iterrows():
+                            key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
+                            is_checked = key in st.session_state.mijn_timetable
+                            
+                            tijdelijke_vinkjes[key] = st.checkbox(
+                                f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
+                                value=is_checked,
+                                key=f"cb_tab1_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
+                            )
+                
+            if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
+                nieuwe_selectie = [k for k, v in tijdelijke_vinkjes.items() if v]
+                
+                for oude_key in st.session_state.mijn_timetable:
+                    if oude_key not in tijdelijke_vinkjes:
+                        nieuwe_selectie.append(oude_key)
+                        
+                st.session_state.mijn_timetable = nieuwe_selectie
+                st.rerun()
 
-with col2:
-    st.subheader("Jouw Persoonlijke Planning")
+    with col2:
+        st.subheader("Jouw Persoonlijke Planning")
+        
+        if not st.session_state.mijn_timetable:
+            st.info("Je hebt nog geen artiesten geselecteerd. Vink je favorieten aan de linkerkant aan en druk op Opslaan.")
+        else:
+            st.success(f"Je hebt {len(st.session_state.mijn_timetable)} optredens geselecteerd!")
+            
+            geselecteerde_acts = []
+            for act in liquicity_acts:
+                match_key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
+                if match_key in st.session_state.mijn_timetable:
+                    geselecteerde_acts.append(act)
+            
+            df_selectie = pd.DataFrame(geselecteerde_acts)
+            st.dataframe(df_selectie[["Dag", "Start", "Eind", "Artiest", "Stage"]], use_container_width=True, hide_index=True)
+            
+            # ICS Generator
+            ics_content = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Liquicity Timetable Planner//NL\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n"
+            
+            for act in geselecteerde_acts:
+                date_clean = act["Datum"].replace("-", "")
+                start_clean = act["Start"].replace(":", "") + "00"
+                end_clean = act["Eind"].replace(":", "") + "00"
+                
+                end_date = date_clean
+                if int(end_clean) <= int(start_clean):
+                    if date_clean == "20260717": end_date = "20260718"
+                    elif date_clean == "20260718": end_date = "20260719"
+                    elif date_clean == "20260719": end_date = "20260720"
+
+                ics_content += "BEGIN:VEVENT\n"
+                ics_content += f"SUMMARY:🚀 {act['Artiest']}\n"
+                ics_content += f"LOCATION:🏟️ {act['Stage']}\n"
+                ics_content += f"DESCRIPTION:Liquicity Weekend 2026 - live op de {act['Stage']} stage.\n"
+                ics_content += f"DTSTART;TZID=Europe/Amsterdam:{date_clean}T{start_clean}\n"
+                ics_content += f"DTEND;TZID=Europe/Amsterdam:{end_date}T{end_clean}\n"
+                ics_content += "END:VEVENT\n"
+                
+            ics_content += "END:VCALENDAR"
+            
+            ics_bytes = io.BytesIO(ics_content.encode("utf-8"))
+            st.download_button(
+                label="📅 Download .ics Agenda", 
+                data=ics_bytes, 
+                file_name="liquicity_timetable.ics", 
+                mime="text/calendar", 
+                use_container_width=True
+            )
+
+# ==========================================
+# TAB 2: DE FESTIVAL PLATTEGROND (NIEUW!)
+# ==========================================
+with tab2:
+    st.subheader("🚀 Liquicity festivalterrein")
+    st.write("Gebruik deze kaart en handige gids om snel je weg te vinden tussen de stages.")
     
-    if not st.session_state.mijn_timetable:
-        st.info("Je hebt nog geen artiesten geselecteerd. Vink je favorieten aan de linkerkant aan en druk op Opslaan.")
-    else:
-        st.success(f"Je hebt {len(st.session_state.mijn_timetable)} optredens geselecteerd!")
+    # TIP: Als je een online link (.png of .jpg) van de officiële 2026 kaart hebt, 
+    # kun je die hieronder tussen de aanhalingstekens zetten om hem echt te tonen:
+    # st.image("https://jouw-link-naar-plattegrond.jpg", caption="Liquicity 2026 Map", use_container_width=True)
+    
+    st.info("💡 Zodra de officiële 2026-plattegrond online staat, kun je de afbeeldingslink in de code plakken.")
+    
+    # Handig overzichtje van het terrein
+    col_m1, col_m2 = st.columns(2)
+    
+    with col_m1:
+        st.markdown("""
+        ### 🏟️ Stage Locaties & Vibes
+        * **Galaxy Stage (Mainstage):** Centraal op het hoofdveld. Hier vind je de allergrootste headliners.
+        * **Solar Stage:** Aan de rechterzijde van het terrein. Bekend om de energieke sprongen en zonnige sfeer.
+        * **Lunar Stage:** Gelegen in het bos/schaduwgedeelte. Intiem, diep en sfeervol.
+        * **Nebula Stage:** Vlakbij de campingingang. Perfect voor ontdekkingen en unieke community-sets.
+        """)
         
-        geselecteerde_acts = []
-        for act in liquicity_acts:
-            match_key = f"{act['Dag']} | {act['Artiest']} ({act['Start']}-{act['Eind']}) [{act['Stage']}]"
-            if match_key in st.session_state.mijn_timetable:
-                geselecteerde_acts.append(act)
-        
-        df_selectie = pd.DataFrame(geselecteerde_acts)
-        st.dataframe(df_selectie[["Dag", "Start", "Eind", "Artiest", "Stage"]], use_container_width=True, hide_index=True)
-        
-        # === VEILIGE ICS GENERATOR ===
-        ics_content = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Liquicity Timetable Planner//NL\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n"
-        
-        for act in geselecteerde_acts:
-            date_clean = act["Datum"].replace("-", "")
-            start_clean = act["Start"].replace(":", "") + "00"
-            end_clean = act["Eind"].replace(":", "") + "00"
-            
-            end_date = date_clean
-            if int(end_clean) <= int(start_clean):
-                if date_clean == "20260717": end_date = "20260718"
-                elif date_clean == "20260718": end_date = "20260719"
-                elif date_clean == "20260719": end_date = "20260720"
-
-            ics_content += "BEGIN:VEVENT\n"
-            ics_content += f"SUMMARY:🚀 {act['Artiest']}\n"
-            ics_content += f"LOCATION:🏟️ {act['Stage']}\n"
-            ics_content += f"DESCRIPTION:Liquicity Weekend 2026 - live op de {act['Stage']} stage.\n"
-            ics_content += f"DTSTART;TZID=Europe/Amsterdam:{date_clean}T{start_clean}\n"
-            ics_content += f"DTEND;TZID=Europe/Amsterdam:{end_date}T{end_clean}\n"
-            ics_content += "END:VEVENT\n"
-            
-        ics_content += "END:VCALENDAR"
-        
-        ics_bytes = io.BytesIO(ics_content.encode("utf-8"))
-        st.download_button(
-            label="📅 Download .ics Agenda", 
-            data=ics_bytes, 
-            file_name="liquicity_timetable.ics", 
-            mime="text/calendar", 
-            use_container_width=True
-        )
+    with col_m2:
+        st.markdown("""
+        ### 🏕️ Belangrijke Voorzieningen
+        * **Main Food Court:** Direct tussen de Galaxy en Solar stage in.
+        * **Eerste Hulp (EHBO):** Naast de hoofdingang/Nebula stage, 24 uur per dag geopend.
+        * **Muntverkoop & Lockers:** Direct bij binnenkomst na de ticketcontrole.
+        * **Waterpunten:** Gratis drinkwater vind je bij elk toiletblok op het terrein.
+        """)
