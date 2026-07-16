@@ -9,9 +9,6 @@ st.set_page_config(page_title="Liquicity Timetable Planner 2026", page_icon="�
 if "mijn_timetable" not in st.session_state:
     st.session_state.mijn_timetable = []
 
-st.title("🪐 Liquicity Weekend 2026 Timetable Planner")
-st.write("Vink je favoriete artiesten aan, sla ze op en download je persoonlijke `.ics`-agendabestand.")
-
 # Complete Weekend Line-up Data
 liquicity_acts = [
     # ==================== VRIJDAG ====================
@@ -64,6 +61,7 @@ liquicity_acts = [
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "20:30", "Eind": "21:30", "Artiest": "Hot Cues", "Stage": "Nebula"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "21:30", "Eind": "22:30", "Artiest": "Something Else with Fox & Yue", "Stage": "Nebula"},
     {"Dag": "Vrijdag", "Datum": "2026-07-17", "Start": "22:30", "Eind": "23:30", "Artiest": "Blackout Baddies", "Stage": "Nebula"},
+
     # ==================== ZATERDAG ====================
     # === GALAXY STAGE ===
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "11:00", "Eind": "12:30", "Artiest": "Midaze", "Stage": "Galaxy"},
@@ -115,6 +113,7 @@ liquicity_acts = [
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "20:00", "Eind": "21:00", "Artiest": "Rex Hooligan", "Stage": "Nebula"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "21:00", "Eind": "22:00", "Artiest": "Eetlaste Kaksnurk", "Stage": "Nebula"},
     {"Dag": "Zaterdag", "Datum": "2026-07-18", "Start": "22:00", "Eind": "23:30", "Artiest": "Thrasher", "Stage": "Nebula"},
+
     # ==================== ZONDAG ====================
     # === GALAXY STAGE ===
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "11:00", "Eind": "12:30", "Artiest": "Midaze", "Stage": "Galaxy"},
@@ -164,7 +163,6 @@ liquicity_acts = [
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:00", "Eind": "22:00", "Artiest": "Rameses B Psytrance Power Hour", "Stage": "Nebula"},
 ]
 
-
 df_acts = pd.DataFrame(liquicity_acts)
 
 # === ZIJSCHERM NAVIGATIE ===
@@ -209,7 +207,7 @@ if pagina_keuze == "🏠 Welkom":
         st.markdown("""
         ##### 🗺️ Festival Gids & Kaart
         * Bekijk de locaties en de unieke vibes van alle 4 de stages.
-        * Vind snel belangrijke voorzieningen zoals EHBO, waterpunten en barren.
+        * Vind snel belangrijke voorzieningen zoals EHBO, waterpunten hives en barren.
         """)
         
     st.write("---")
@@ -220,6 +218,8 @@ if pagina_keuze == "🏠 Welkom":
 # PAGINA 2: DE TIMETABLE PLANNER
 # ==========================================
 elif pagina_keuze == "📅 Timetable Planner":
+    st.title("🪐 Liquicity Weekend 2026 Timetable Planner")
+    
     col1, col2 = st.columns(2)
 
     with col1:
@@ -331,7 +331,7 @@ elif pagina_keuze == "📅 Timetable Planner":
 # PAGINA 3: DE FESTIVAL PLATTEGROND
 # ==========================================
 elif pagina_keuze == "🗺️ Festival Plattegrond":
-    st.subheader("🚀 Liquicity festivalterrein")
+    st.title("🗺️ Festival Plattegrond")
     st.write("Gebruik deze kaart en handige gids om snel je weg te vinden tussen de stages.")
     
     st.info("💡 Zodra de officiële 2026-plattegrond online staat, kun je de afbeeldingslink in de code plakken.")
@@ -353,5 +353,5 @@ elif pagina_keuze == "🗺️ Festival Plattegrond":
         * **Main Food Court:** Direct tussen de Galaxy en Solar stage in.
         * **Eerste Hulp (EHBO):** Naast de hoofdingang/Nebula stage, 24 uur per dag geopend.
         * **Muntverkoop & Lockers:** Direct bij binnenkomst na de ticketcontrole.
-        * **Waterpunten:** Gratis drinkwater vind je bij elk toilet blok op het terrein.
+        * **Waterpunten:** Gratis drinkwater vind je bij elk toiletblok op het terrein.
         """)
