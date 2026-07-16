@@ -175,7 +175,7 @@ pagina_keuze = st.sidebar.radio(
 )
 
 # ==========================================
-# PAGINA 1: WELKOMSTSCHERM (NIEUW!)
+# PAGINA 1: WELKOMSTSCHERM
 # ==========================================
 if pagina_keuze == "🏠 Welkom":
     st.title("🪐 Welkom bij de Liquicity 2026 Festival Gids!")
@@ -205,7 +205,7 @@ if pagina_keuze == "🏠 Welkom":
         * **Download een `.ics` agendabestand** om je planning direct in de kalender van je telefoon (Google/Apple) te zetten!
         """)
         
-    with col_m2: # Gebruikt de kolomruimte voor plattegrond info
+    with col_w2:
         st.markdown("""
         ##### 🗺️ Festival Gids & Kaart
         * Bekijk de locaties en de unieke vibes van alle 4 de stages.
@@ -353,6 +353,5 @@ elif pagina_keuze == "🗺️ Festival Plattegrond":
         * **Main Food Court:** Direct tussen de Galaxy en Solar stage in.
         * **Eerste Hulp (EHBO):** Naast de hoofdingang/Nebula stage, 24 uur per dag geopend.
         * **Muntverkoop & Lockers:** Direct bij binnenkomst na de ticketcontrole.
-        * **Waterpunten:** Gratis drinkwater vind je bij elk toiletblok op het terrein.
+        * **Waterpunten:** Gratis drinkwater vind je bij elk toilet blok op het terrein.
         """)
-
