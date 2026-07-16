@@ -164,15 +164,20 @@ liquicity_acts = [
     {"Dag": "Zondag", "Datum": "2026-07-19", "Start": "21:00", "Eind": "22:00", "Artiest": "Rameses B Psytrance Power Hour", "Stage": "Nebula"},
 ]
 
+
 df_acts = pd.DataFrame(liquicity_acts)
 
-# === HOOFDPAGINA TABBLADEN AANMAKEN ===
-tab1, tab2 = st.tabs(["📅 Timetable Planner", "🗺️ Festival Plattegrond"])
+# === ZIJSCHERM NAVIGATIE (Perfect voor Mobiel) ===
+st.sidebar.title("🪐 Navigatie")
+pagina_keuze = st.sidebar.radio(
+    "Ga naar:",
+    ["📅 Timetable Planner", "🗺️ Festival Plattegrond"]
+)
 
 # ==========================================
-# TAB 1: DE TIMETABLE PLANNER (BESTAANDE CODE)
+# PAGINA 1: DE TIMETABLE PLANNER
 # ==========================================
-with tab1:
+if pagina_keuze == "📅 Timetable Planner":
     col1, col2 = st.columns(2)
 
     with col1:
@@ -187,7 +192,7 @@ with tab1:
                 "Kies Dag(en):", 
                 options=["Vrijdag", "Zaterdag", "Zondag"], 
                 default=["Vrijdag", "Zaterdag", "Zondag"],
-                key="filter_dag_tab1"
+                key="filter_dag_sidebar"
             )
             
         with f_col2:
@@ -195,12 +200,12 @@ with tab1:
                 "Kies Stage(s):", 
                 options=["Galaxy", "Solar", "Lunar", "Nebula"], 
                 default=["Galaxy", "Solar", "Lunar", "Nebula"],
-                key="filter_stage_tab1"
+                key="filter_stage_sidebar"
             )
             
         st.write("---")
         
-        with st.form(key="form_timetable_local_tabs"):
+        with st.form(key="form_timetable_sidebar"):
             tijdelijke_vinkjes = {}
             
             for dag in ["Vrijdag", "Zaterdag", "Zondag"]:
@@ -217,7 +222,7 @@ with tab1:
                             tijdelijke_vinkjes[key] = st.checkbox(
                                 f"{act['Start']} - {act['Eind']} | **{act['Artiest']}** ({act['Stage']})", 
                                 value=is_checked,
-                                key=f"cb_tab1_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
+                                key=f"cb_sb_{act['Dag']}_{act['Artiest'].replace(' ', '_')}_{act['Start'].replace(':', '')}"
                             )
                 
             if st.form_submit_button("💾 Keuzes Opslaan", type="primary"):
@@ -281,15 +286,11 @@ with tab1:
             )
 
 # ==========================================
-# TAB 2: DE FESTIVAL PLATTEGROND (NIEUW!)
+# PAGINA 2: DE FESTIVAL PLATTEGROND
 # ==========================================
-with tab2:
+elif pagina_keuze == "🗺️ Festival Plattegrond":
     st.subheader("🚀 Liquicity festivalterrein")
     st.write("Gebruik deze kaart en handige gids om snel je weg te vinden tussen de stages.")
-    
-    # TIP: Als je een online link (.png of .jpg) van de officiële 2026 kaart hebt, 
-    # kun je die hieronder tussen de aanhalingstekens zetten om hem echt te tonen:
-    # st.image("https://jouw-link-naar-plattegrond.jpg", caption="Liquicity 2026 Map", use_container_width=True)
     
     st.info("💡 Zodra de officiële 2026-plattegrond online staat, kun je de afbeeldingslink in de code plakken.")
     
@@ -308,7 +309,7 @@ with tab2:
     with col_m2:
         st.markdown("""
         ### 🏕️ Belangrijke Voorzieningen
-        * **Main Food Court:** Direct tussen de Galaxy en Solar stage in.
+        * **Main Food Court:** Direct tussen de Galaxy and Solar stage in.
         * **Eerste Hulp (EHBO):** Naast de hoofdingang/Nebula stage, 24 uur per dag geopend.
         * **Muntverkoop & Lockers:** Direct bij binnenkomst na de ticketcontrole.
         * **Waterpunten:** Gratis drinkwater vind je bij elk toiletblok op het terrein.
