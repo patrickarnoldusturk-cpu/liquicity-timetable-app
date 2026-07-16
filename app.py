@@ -167,17 +167,59 @@ liquicity_acts = [
 
 df_acts = pd.DataFrame(liquicity_acts)
 
-# === ZIJSCHERM NAVIGATIE (Perfect voor Mobiel) ===
-st.sidebar.title("🪐 Navigatie")
+# === ZIJSCHERM NAVIGATIE ===
+st.sidebar.title("🪐 Liquicity Gids")
 pagina_keuze = st.sidebar.radio(
     "Ga naar:",
-    ["📅 Timetable Planner", "🗺️ Festival Plattegrond"]
+    ["🏠 Welkom", "📅 Timetable Planner", "🗺️ Festival Plattegrond"]
 )
 
 # ==========================================
-# PAGINA 1: DE TIMETABLE PLANNER
+# PAGINA 1: WELKOMSTSCHERM (NIEUW!)
 # ==========================================
-if pagina_keuze == "📅 Timetable Planner":
+if pagina_keuze == "🏠 Welkom":
+    st.title("🪐 Welkom bij de Liquicity 2026 Festival Gids!")
+    st.markdown("### *Welcome to the Galaxy of Dreams!* 🚀")
+    
+    st.write(
+        "Dit weekend transformeren we Geestmerambacht weer tot het gezelligste Drum & Bass paradijs "
+        "ter wereld. Om ervoor te zorgen dat je geen enkele favoriete artiest mist, hebben we deze handige "
+        "offline tool voor je gebouwd."
+    )
+    
+    # Handig infoblok met data
+    st.info("""
+    📅 **Festival Data:** Vrijdag 17 juli t/m Zondag 19 juli 2026  
+    📍 **Locatie:** Recreatiegebied Geestmerambacht, Nederland  
+    ✨ **Tip:** Deze app werkt volledig lokaal in je browser. Je keuzes zijn privé en overschrijven die van anderen niet!
+    """)
+    
+    st.markdown("### 🛠️ Wat kun je hier doen?")
+    col_w1, col_w2 = st.columns(2)
+    
+    with col_w1:
+        st.markdown("""
+        ##### 📅 Persoonlijke Timetable
+        * Filter eenvoudig op festivaldag of je favoriete stage.
+        * Vink je 'must-see' artiesten aan en sla ze op.
+        * **Download een `.ics` agendabestand** om je planning direct in de kalender van je telefoon (Google/Apple) te zetten!
+        """)
+        
+    with col_m2: # Gebruikt de kolomruimte voor plattegrond info
+        st.markdown("""
+        ##### 🗺️ Festival Gids & Kaart
+        * Bekijk de locaties en de unieke vibes van alle 4 de stages.
+        * Vind snel belangrijke voorzieningen zoals EHBO, waterpunten en barren.
+        """)
+        
+    st.write("---")
+    st.markdown("#### 🛸 Klaar om je weekend te plannen?")
+    st.info("Navigeer in het zijmenu (linksboven op mobiel) naar **📅 Timetable Planner** om direct te beginnen!")
+
+# ==========================================
+# PAGINA 2: DE TIMETABLE PLANNER
+# ==========================================
+elif pagina_keuze == "📅 Timetable Planner":
     col1, col2 = st.columns(2)
 
     with col1:
@@ -286,7 +328,7 @@ if pagina_keuze == "📅 Timetable Planner":
             )
 
 # ==========================================
-# PAGINA 2: DE FESTIVAL PLATTEGROND
+# PAGINA 3: DE FESTIVAL PLATTEGROND
 # ==========================================
 elif pagina_keuze == "🗺️ Festival Plattegrond":
     st.subheader("🚀 Liquicity festivalterrein")
@@ -294,7 +336,6 @@ elif pagina_keuze == "🗺️ Festival Plattegrond":
     
     st.info("💡 Zodra de officiële 2026-plattegrond online staat, kun je de afbeeldingslink in de code plakken.")
     
-    # Handig overzichtje van het terrein
     col_m1, col_m2 = st.columns(2)
     
     with col_m1:
@@ -309,8 +350,9 @@ elif pagina_keuze == "🗺️ Festival Plattegrond":
     with col_m2:
         st.markdown("""
         ### 🏕️ Belangrijke Voorzieningen
-        * **Main Food Court:** Direct tussen de Galaxy and Solar stage in.
+        * **Main Food Court:** Direct tussen de Galaxy en Solar stage in.
         * **Eerste Hulp (EHBO):** Naast de hoofdingang/Nebula stage, 24 uur per dag geopend.
         * **Muntverkoop & Lockers:** Direct bij binnenkomst na de ticketcontrole.
         * **Waterpunten:** Gratis drinkwater vind je bij elk toiletblok op het terrein.
         """)
+
